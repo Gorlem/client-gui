@@ -1,12 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.fabricmc.example.mixin",
+  "package": "com.ddoerr.clientgui.modifications.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
   "client": [
-    "ExampleMixin"
+    "MinecraftClientMixin",
+    "GameRendererMixin",
+    "MouseMixin",
+    "KeyboardMixin"
   ],
   "injectors": {
     "defaultRequire": 1
