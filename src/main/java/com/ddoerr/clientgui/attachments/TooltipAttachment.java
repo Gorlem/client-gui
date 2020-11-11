@@ -12,14 +12,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 
-public class TooltipAttachment implements Attachment, RenderListener {
+public class TooltipAttachment implements RenderListener {
     protected final ListProperty<OrderedText> textLines = new SimpleListProperty<>(this, "textLines", FXCollections.observableArrayList());
 
-    public TooltipAttachment(Widget widget) {
+    public TooltipAttachment(Widget<?> widget) {
         this.widget = widget;
     }
 
-    private final Widget widget;
+    private final Widget<?> widget;
 
 
     public ListProperty<OrderedText> textLinesProperty() {

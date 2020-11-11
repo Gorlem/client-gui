@@ -20,6 +20,9 @@
   "entrypoints": {
     "client": [
       "com.ddoerr.clientgui.ClientGuiMod"
+    ],
+    "clientgui:theme": [
+      "com.ddoerr.themes.DefaultTheme"
     ]
   },
   "mixins": [

@@ -1,13 +1,10 @@
 package com.ddoerr.clientgui;
 
-import com.ddoerr.clientgui.attacher.ScreenAttacher;
 import com.ddoerr.clientgui.attacher.ViewScreenAdapter;
 import com.ddoerr.clientgui.test.TestView;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;

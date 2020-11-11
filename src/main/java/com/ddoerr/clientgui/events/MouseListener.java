@@ -1,9 +1,20 @@
 package com.ddoerr.clientgui.events;
 
+import net.minecraft.util.ActionResult;
+
 import java.util.EventListener;
 
 public interface MouseListener extends EventListener {
-    default void mouseUp(MouseEvent mouseEvent) {}
-    default void mouseDown(MouseEvent mouseEvent) {}
-    default void mouseMoved(MouseEvent mouseEvent) {}
+    default ActionResult mouseUp(MouseEvent mouseEvent) {
+        return ActionResult.PASS;
+    }
+    default ActionResult mouseDown(MouseEvent mouseEvent) {
+        return ActionResult.PASS;
+    }
+    default ActionResult mouseMoved(MouseEvent mouseEvent) {
+        return ActionResult.PASS;
+    }
+    default ActionResult mouseDragged(MouseEvent mouseEvent) {
+        return ActionResult.PASS;
+    }
 }

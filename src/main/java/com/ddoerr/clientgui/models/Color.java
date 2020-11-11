@@ -16,27 +16,27 @@ public class Color {
     private static final Splitter commaSplitter = Splitter.on(",");
 
     // clrs.cc
-    public static final Color NAVY = new Color(0x00, 0x1F, 0x3F, "NAVY");
-    public static final Color BLUE = new Color(0x00, 0x74, 0xD9, "BLUE");
-    public static final Color AQUA = new Color(0x7F, 0xDB, 0xFF, "AQUA");
-    public static final Color TEAL = new Color(0x39, 0xCC, 0xCC, "TEAL");
-    public static final Color OLIVE = new Color(0x3D, 0x99, 0x70, "OLIVE");
-    public static final Color GREEN = new Color(0x2E, 0xCC, 0x40, "GREEN");
-    public static final Color LIME = new Color(0x01, 0xFF, 0x70, "LIME");
-    public static final Color YELLOW = new Color(0xFF, 0xDC, 0x00, "YELLOW");
-    public static final Color ORANGE = new Color(0xFF, 0x85, 0x1B, "ORANGE");
-    public static final Color RED = new Color(0xFF, 0x41, 0x36, "RED");
-    public static final Color MAROON = new Color(0x85, 0x14, 0x4b, "MAROON");
-    public static final Color FUCHSIA = new Color(0xF0, 0x12, 0xBE, "FUCHSIA");
-    public static final Color PURPLE = new Color(0xB1, 0x0D, 0xC9, "PURPLE");
-    public static final Color BLACK = new Color(0x11, 0x11, 0x11, "BLACK");
-    public static final Color GREY = new Color(0xAA, 0xAA, 0xAA, "GREY");
-    public static final Color SILVER = new Color(0xDD, 0xDD, 0xDD, "SILVER");
-    public static final Color WHITE = new Color(0xFF, 0xFF, 0xFF, "WHITE");
+    public static final Color NAVY      = new Color(0x00, 0x1F, 0x3F, "NAVY");
+    public static final Color BLUE      = new Color(0x00, 0x74, 0xD9, "BLUE");
+    public static final Color AQUA      = new Color(0x7F, 0xDB, 0xFF, "AQUA");
+    public static final Color TEAL      = new Color(0x39, 0xCC, 0xCC, "TEAL");
+    public static final Color OLIVE     = new Color(0x3D, 0x99, 0x70, "OLIVE");
+    public static final Color GREEN     = new Color(0x2E, 0xCC, 0x40, "GREEN");
+    public static final Color LIME      = new Color(0x01, 0xFF, 0x70, "LIME");
+    public static final Color YELLOW    = new Color(0xFF, 0xDC, 0x00, "YELLOW");
+    public static final Color ORANGE    = new Color(0xFF, 0x85, 0x1B, "ORANGE");
+    public static final Color RED       = new Color(0xFF, 0x41, 0x36, "RED");
+    public static final Color MAROON    = new Color(0x85, 0x14, 0x4b, "MAROON");
+    public static final Color FUCHSIA   = new Color(0xF0, 0x12, 0xBE, "FUCHSIA");
+    public static final Color PURPLE    = new Color(0xB1, 0x0D, 0xC9, "PURPLE");
+    public static final Color BLACK     = new Color(0x11, 0x11, 0x11, "BLACK");
+    public static final Color GREY      = new Color(0xAA, 0xAA, 0xAA, "GREY");
+    public static final Color SILVER    = new Color(0xDD, 0xDD, 0xDD, "SILVER");
+    public static final Color WHITE     = new Color(0xFF, 0xFF, 0xFF, "WHITE");
 
     public static final Color TRANSPARENT = new Color(0x00, 0x00, 0x00, 0x00, "TRANSPARENT");
 
-    private static final Color[] colors = new Color[] {
+    private static final Color[] namedColors = new Color[] {
         NAVY, BLUE, AQUA, TEAL, OLIVE, GREEN, LIME, YELLOW, ORANGE, RED, MAROON, FUCHSIA, PURPLE, BLACK, GREY, SILVER, WHITE, TRANSPARENT
     };
 
@@ -140,7 +140,7 @@ public class Color {
             alpha = Integer.parseInt(onlyNumber);
         }
 
-        for (Color color : colors) {
+        for (Color color : namedColors) {
             if (color.original.equalsIgnoreCase(colorName)) {
                 if (alpha == -1) {
                     return color;
@@ -173,19 +173,19 @@ public class Color {
         return null;
     }
 
-    public Color(int alpha, int red, int green, int blue) {
+    private Color(int alpha, int red, int green, int blue) {
         this(alpha, red, green, blue, null);
     }
 
-    public Color(int red, int green, int blue) {
+    private Color(int red, int green, int blue) {
         this(0xff, red, green, blue, null);
     }
 
-    public Color(int red, int green, int blue, String original) {
+    private Color(int red, int green, int blue, String original) {
         this(0xff, red, green, blue, original);
     }
 
-    public Color(int alpha, int red, int green, int blue, String original) {
+    private Color(int alpha, int red, int green, int blue, String original) {
         this.alpha = alpha;
         this.red = red;
         this.green = green;

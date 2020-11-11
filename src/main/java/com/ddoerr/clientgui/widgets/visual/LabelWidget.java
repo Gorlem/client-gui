@@ -1,34 +1,40 @@
-package com.ddoerr.clientgui.widgets;
+package com.ddoerr.clientgui.widgets.visual;
 
 import com.ddoerr.clientgui.util.Renderer;
 import com.ddoerr.clientgui.models.Color;
 import com.ddoerr.clientgui.models.Point;
 import com.ddoerr.clientgui.models.Rectangle;
 import com.ddoerr.clientgui.models.Size;
+import com.ddoerr.clientgui.widgets.Widget;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 
-public class LabelWidget extends Widget {
-    protected final ObjectProperty<Text> text = new SimpleObjectProperty<>(this, "text", LiteralText.EMPTY);
+public class LabelWidget extends Widget<LabelWidget> {
+    protected final ObjectProperty<OrderedText> text = new SimpleObjectProperty<OrderedText>(this, "text", OrderedText.EMPTY);
     protected final ObjectProperty<Color> foregroundColor = new SimpleObjectProperty<>(this, "foregroundColor", Color.WHITE);
     protected final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(this, "backgroundColor", Color.TRANSPARENT);
 
-    public ObjectProperty<Text> textProperty() {
+    public ObjectProperty<OrderedText> textProperty() {
         return text;
     }
-    public Text getText() {
+    public OrderedText getText() {
         return text.get();
     }
-    public void setText(Text text) {
+    public LabelWidget setText(OrderedText text) {
         this.text.set(text);
+        return this;
     }
-    public void setText(String text) {
-        setText(new LiteralText(text));
+    public LabelWidget setText(Text text) {
+        return setText(text.asOrderedText());
+    }
+    public LabelWidget setText(String text) {
+        return setText(new LiteralText(text).asOrderedText());
     }
 
     public ObjectProperty<Color> foregroundColorProperty() {
@@ -52,19 +58,16 @@ public class LabelWidget extends Widget {
     }
 
     public LabelWidget() {
-        super();
         size.bind(Bindings.createObjectBinding(() -> {
             int stringHeight = MinecraftClient.getInstance().textRenderer.fontHeight;
-            int stringWidth = MinecraftClient.getInstance().textRenderer.getWidth(text.get());
-            return new Size(
-                    stringWidth + padding.get().getWidth(),
-                    stringHeight + padding.get().getHeight());
+            int stringWidth = MinecraftClient.getInstance().textRenderer.getWidth(getText());
+            return Size.of(stringWidth, stringHeight).addOuterInsets(getPadding());
         }, text, padding));
     }
 
     @Override
     public void render(MatrixStack matrixStack, Point mouse) {
-        Renderer.renderRectangle(matrixStack, new Rectangle(position.get().addInsets(margin.get()), size.get()), backgroundColor.get());
-        Renderer.renderText(matrixStack, text.get(), position.get().addInsets(margin.get()).addInsets(padding.get()), foregroundColor.get());
+        Renderer.renderRectangle(matrixStack, Rectangle.of(getPosition().addInnerInsets(getMargin()), getSize()), getBackgroundColor());
+        Renderer.renderText(matrixStack, getText(), getPosition().addInnerInsets(getMargin()).addInnerInsets(getPadding()), getForegroundColor());
     }
 }
