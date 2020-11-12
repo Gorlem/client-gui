@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class CheckboxWidget extends Widget<CheckboxWidget> {
     protected final InteractiveAttachment interactiveAttachment = new InteractiveAttachment(this, focusListeners.fire());
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
     protected final CursorAttachment cursorAttachment = new CursorAttachment(this, CursorManager.Cursor.HAND);
 
     protected final ObjectProperty<ColorPalette> backgroundPalette = new SimpleObjectProperty<>(this, "backgroundPalette",
@@ -38,7 +38,7 @@ public class CheckboxWidget extends Widget<CheckboxWidget> {
         attach(cursorAttachment);
         attach(containerAttachment);
 
-        containerAttachment.addChild(build(), null, true);
+        containerAttachment.addChild(build());
     }
 
     protected Widget<?> build() {

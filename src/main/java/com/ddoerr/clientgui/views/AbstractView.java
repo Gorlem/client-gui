@@ -10,7 +10,7 @@ import net.minecraft.client.MinecraftClient;
 public abstract class AbstractView extends Widget<AbstractView> {
     protected final FocusChangeSupport focusChangeSupport = new FocusChangeSupport(this);
 
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
     protected final ShortcutAttachment shortcutAttachment = new ShortcutAttachment();
 
     public AbstractView() {
@@ -27,7 +27,7 @@ public abstract class AbstractView extends Widget<AbstractView> {
 
     public void setChild(Widget<?> widget) {
         containerAttachment.removeChildren();
-        containerAttachment.addChild(widget, null, true);
+        containerAttachment.addChild(widget);
     }
 
     public abstract void build();

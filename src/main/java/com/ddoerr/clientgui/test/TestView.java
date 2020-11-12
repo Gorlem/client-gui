@@ -1,15 +1,14 @@
 package com.ddoerr.clientgui.test;
 
+import com.ddoerr.clientgui.attachments.ContainerAttachment;
+import com.ddoerr.clientgui.attachments.DraggableAttachment;
 import com.ddoerr.clientgui.attachments.TooltipAttachment;
 import com.ddoerr.clientgui.models.Color;
 import com.ddoerr.clientgui.models.Insets;
 import com.ddoerr.clientgui.models.Size;
 import com.ddoerr.clientgui.views.AbstractView;
 import com.ddoerr.clientgui.widgets.functional.*;
-import com.ddoerr.clientgui.widgets.layout.AnchorWidget;
-import com.ddoerr.clientgui.widgets.layout.CardWidget;
-import com.ddoerr.clientgui.widgets.layout.GridWidget;
-import com.ddoerr.clientgui.widgets.layout.StackWidget;
+import com.ddoerr.clientgui.widgets.layout.*;
 import com.ddoerr.clientgui.widgets.visual.ColorWidget;
 import com.ddoerr.clientgui.widgets.visual.ItemWidget;
 import com.ddoerr.clientgui.widgets.visual.LabelWidget;
@@ -91,17 +90,17 @@ public class TestView extends AbstractView {
         ColorWidget colorWidget1 = new ColorWidget();
         colorWidget1.setColor(Color.BLUE.addAlpha(0.5));
         colorWidget1.setMargin(Insets.of(3));
-        gridWidget.addChild(colorWidget1, new GridWidget.CellPosition(0, 2, 0, 2), true);
+        gridWidget.addChild(colorWidget1, new GridWidget.CellPosition(0, 2, 0, 2));
 
         ColorWidget colorWidget2 = new ColorWidget();
         colorWidget2.setColor(Color.ORANGE.addAlpha(0.5));
         colorWidget2.setMargin(Insets.of(4));
-        gridWidget.addChild(colorWidget2, new GridWidget.CellPosition(2, 1, 0, 3), true);
+        gridWidget.addChild(colorWidget2, new GridWidget.CellPosition(2, 1, 0, 3));
 
         ColorWidget colorWidget3 = new ColorWidget();
         colorWidget3.setColor(Color.GREEN.addAlpha(0.5));
         colorWidget3.setMargin(Insets.of(2));
-        gridWidget.addChild(colorWidget3, new GridWidget.CellPosition(0, 4, 2, 1), true);
+        gridWidget.addChild(colorWidget3, new GridWidget.CellPosition(0, 4, 2, 1));
 
         anchorWidget.addChild(gridWidget, AnchorWidget.Anchor.BottomLeft);
 
@@ -121,5 +120,24 @@ public class TestView extends AbstractView {
                         .addTab(new LiteralText("Second tab").asOrderedText(), new ColorWidget().setColor(Color.BLUE))
                         .addTab(new LiteralText("End").asOrderedText(), new ColorWidget().setColor(Color.GREEN)),
                 AnchorWidget.Anchor.TopCenter);
+
+        anchorWidget.addChild(new ListWidget()
+                .setSize(Size.of(100, 100))
+                .addChild(new ColorWidget().setColor(Color.ORANGE).setSize(Size.of(100, 30)))
+                .addChild(new ColorWidget().setColor(Color.OLIVE).setSize(Size.of(100, 30)))
+                .addChild(new ColorWidget().setColor(Color.RED).setSize(Size.of(100, 30)))
+                .addChild(new ColorWidget().setColor(Color.NAVY).setSize(Size.of(100, 30))),
+            AnchorWidget.Anchor.MiddleCenter);
+
+        ContainerAttachment area = new ContainerAttachment(null);
+        area.setWidgetConsumer(addedWidget -> {}, removedWidget -> {});
+        DraggableAttachment draggableAttachment = new DraggableAttachment();
+        ColorWidget background = new ColorWidget().setColor(Color.BLACK.addAlpha(0.5)).setSize(Size.of(200)).attach(area);
+
+        draggableAttachment.setParent(background);
+
+        anchorWidget.addChild(background, AnchorWidget.Anchor.BottomCenter);
+        area.addChild(new ColorWidget().setColor(Color.RED).setSize(Size.of(20)).attach(draggableAttachment));
+
     }
 }

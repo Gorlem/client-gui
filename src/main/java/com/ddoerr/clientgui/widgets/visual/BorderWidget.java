@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class BorderWidget extends Widget<BorderWidget> {
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
 
     protected final ObjectProperty<Insets> borderThickness = new SimpleObjectProperty<>(this, "borderThickness", Insets.EMPTY);
     protected final ObjectProperty<Color> borderColor = new SimpleObjectProperty<>(this, "borderColor", Color.TRANSPARENT);
@@ -60,7 +60,7 @@ public class BorderWidget extends Widget<BorderWidget> {
 
     public BorderWidget setChild(Widget<?> widget) {
         containerAttachment.removeChildren();
-        containerAttachment.addChild(widget, null, true);
+        containerAttachment.addChild(widget);
         return this;
     }
 

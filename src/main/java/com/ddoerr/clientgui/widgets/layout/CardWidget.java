@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 
 public class CardWidget extends Widget<CardWidget> {
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
 
     protected final IntegerProperty selectedIndex = new SimpleIntegerProperty(this, "selectedIndex", 0);
 
@@ -46,7 +46,7 @@ public class CardWidget extends Widget<CardWidget> {
     }
 
     public CardWidget addChild(Widget<?> child) {
-        containerAttachment.addChild(child, null, true);
+        containerAttachment.addChild(child);
         return this;
     }
 }

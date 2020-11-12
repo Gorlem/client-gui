@@ -18,7 +18,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class ButtonWidget extends Widget<ButtonWidget> {
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
     protected final InteractiveAttachment interactiveAttachment = new InteractiveAttachment(this, focusListeners.fire());
     protected final CursorAttachment cursorAttachment = new CursorAttachment(this, CursorManager.Cursor.HAND);
 
@@ -40,7 +40,7 @@ public class ButtonWidget extends Widget<ButtonWidget> {
         attach(containerAttachment);
         attach(cursorAttachment);
 
-        containerAttachment.addChild(build(), null, true);
+        containerAttachment.addChild(build());
     }
 
     protected Widget<?> build() {

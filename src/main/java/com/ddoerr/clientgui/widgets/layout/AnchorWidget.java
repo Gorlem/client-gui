@@ -5,13 +5,11 @@ import com.ddoerr.clientgui.models.*;
 import com.ddoerr.clientgui.widgets.Widget;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 
 public class AnchorWidget extends Widget<AnchorWidget> {
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
 
     public AnchorWidget() {
-        containerAttachment.setPositionCalculation(this::calculateChildPosition);
         attach(containerAttachment);
 
         containerAttachment.setWidgetConsumer(addedWidget -> {
@@ -30,14 +28,9 @@ public class AnchorWidget extends Widget<AnchorWidget> {
     }
 
     public AnchorWidget addChild(Widget<?> widget, Anchor anchor) {
-        containerAttachment.addChild(widget, anchor);
+        widget.attach(anchor);
+        containerAttachment.addChild(widget);
         return this;
-    }
-
-    Point calculateChildPosition(Widget<?> child) {
-        return child.findFirstAttachment(Anchor.class)
-                .map(a -> a.calculatePosition(getSize(), getMargin(), child.getOuterSize()).addPoint(position.get()))
-                .orElse(Point.ORIGIN);
     }
 
     public enum Anchor {

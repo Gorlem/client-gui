@@ -13,7 +13,7 @@ import javafx.collections.FXCollections;
 
 public class StackWidget extends Widget<StackWidget> {
     protected final ObjectProperty<StackDirection> stackDirection = new SimpleObjectProperty<>(this, "stackDirection", StackDirection.Vertical);
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
 
     public StackWidget() {
         containerAttachment.childrenProperty().set(FXCollections.observableArrayList((child -> new Observable[] { child.outerSizeProperty() })));
@@ -37,7 +37,6 @@ public class StackWidget extends Widget<StackWidget> {
             return Size.of(width, height);
         }, containerAttachment.childrenProperty()));
 
-        containerAttachment.setPositionCalculation(this::calculateChildPosition);
         attach(containerAttachment);
 
         containerAttachment.setWidgetConsumer(addedWidget -> {
@@ -83,30 +82,8 @@ public class StackWidget extends Widget<StackWidget> {
         return containerAttachment.childrenProperty();
     }
     public StackWidget addChild(Widget<?> child) {
-        containerAttachment.addChild(child, null);
+        containerAttachment.addChild(child);
         return this;
-    }
-
-    Point calculateChildPosition(Widget<?> newChild) {
-        int x = position.get().getX();
-        int y = position.get().getY();
-
-        for (Widget<?> child : containerAttachment.getChildren()) {
-            if (child.equals(newChild)) {
-                break;
-            }
-
-            switch (stackDirection.get()) {
-                case Vertical:
-                    y += child.getOuterSize().getHeight();
-                    break;
-                case Horizontal:
-                    x += child.getOuterSize().getWidth();
-                    break;
-            }
-        }
-
-        return Point.of(x, y);
     }
 
     public enum StackDirection {

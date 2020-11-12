@@ -3,14 +3,11 @@ package com.ddoerr.clientgui.util;
 import com.ddoerr.clientgui.models.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class Renderer {
     private static final MinecraftClient minecraft = MinecraftClient.getInstance();
@@ -81,12 +78,12 @@ public class Renderer {
         double scaleFactor = minecraft.getWindow().getScaleFactor();
 
         Point point = area.getBottomLeftPoint();
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(
                 (int) (point.getX() * scaleFactor),
-                (int) ((minecraft.getWindow().getHeight() - point.getY()) * scaleFactor),
-                (int) (100 * scaleFactor),
-                (int) (100 * scaleFactor));
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+                (int) ((minecraft.getWindow().getScaledHeight() - point.getY()) * scaleFactor),
+                (int) (area.getWidth() * scaleFactor),
+                (int) (area.getHeight() * scaleFactor));
     }
 
     public static void disableScissor() {

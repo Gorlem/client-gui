@@ -10,11 +10,9 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class GridWidget extends Widget<GridWidget> {
     protected final ObjectProperty<GridDefinition> gridDefinition = new SimpleObjectProperty<>(this, "gridDefinition", GridDefinition.DEFAULT);
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
 
     public GridWidget() {
-        containerAttachment.setSizeCalculation(this::calculateChildSize);
-        containerAttachment.setPositionCalculation(this::calculateChildPosition);
         attach(containerAttachment);
 
         containerAttachment.setWidgetConsumer(addedWidget -> {
@@ -55,29 +53,10 @@ public class GridWidget extends Widget<GridWidget> {
         this.gridDefinition.set(gridDefinition);
     }
 
-    Point calculateChildPosition(Widget<?> child) {
-        CellPosition cellPosition = child.findFirstAttachment(CellPosition.class).orElse(CellPosition.DEFAULT);
 
-        int cellWidth = getSize().getWidth() / getGridDefinition().columns;
-        int cellHeight = getSize().getHeight() / getGridDefinition().rows;
-
-        int x = cellWidth * cellPosition.column;
-        int y = cellHeight * cellPosition.row;
-
-        return getPosition().add(x, y).addInnerInsets(getMargin());
-    }
-
-    Size calculateChildSize(Widget<?> child) {
-        CellPosition cellPosition = child.findFirstAttachment(CellPosition.class).orElse(CellPosition.DEFAULT);
-
-        int cellWidth = getSize().getWidth() / getGridDefinition().columns * cellPosition.columnSpan;
-        int cellHeight = getSize().getHeight() / getGridDefinition().rows * cellPosition.rowSpan;
-
-        return Size.of(cellWidth, cellHeight).addInnerInsets(child.getMargin());
-    }
-
-    public void addChild(Widget<?> child, CellPosition cellPosition, boolean fitToCell) {
-        containerAttachment.addChild(child, cellPosition, fitToCell);
+    public void addChild(Widget<?> child, CellPosition cellPosition) {
+        child.attach(cellPosition);
+        containerAttachment.addChild(child);
     }
 
     public static class GridDefinition {

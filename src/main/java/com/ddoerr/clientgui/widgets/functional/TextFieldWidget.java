@@ -29,7 +29,7 @@ import net.minecraft.util.ActionResult;
 
 public class TextFieldWidget extends Widget<TextFieldWidget> {
     protected final CursorAttachment cursorAttachment = new CursorAttachment(this, CursorManager.Cursor.IBEAM);
-    protected final ContainerAttachment containerAttachment = new ContainerAttachment(this, focusListeners.fire());
+    protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
     protected final ShortcutAttachment shortcutAttachment = new ShortcutAttachment();
     protected final SelectionAttachment selectionAttachment = new SelectionAttachment();
 
@@ -48,7 +48,7 @@ public class TextFieldWidget extends Widget<TextFieldWidget> {
         attach(shortcutAttachment);
         attach(selectionAttachment);
 
-        containerAttachment.addChild(build(), null, true);
+        containerAttachment.addChild(build());
 
         shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.backspace"), e -> removeLeft());
         shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.delete"), e -> removeRight());

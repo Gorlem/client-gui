@@ -204,8 +204,12 @@ public abstract class Widget<W extends Widget<W>> implements MouseListener, Focu
     public void renderFinal(MatrixStack matrixStack, Point mouse) {}
 
     public boolean isWithinWidget(Point point) {
-        return point.getX() >= position.get().getX() + margin.get().getLeft() && point.getX() < position.get().getX() + margin.get().getLeft() + size.get().getWidth()
-                && point.getY() >= position.get().getY() + margin.get().getTop() && point.getY() < position.get().getY() + margin.get().getTop()  + size.get().getHeight();
+        return isWithinWidget(point, Size.EMPTY);
+    }
+
+    public boolean isWithinWidget(Point point, Size size) {
+        return point.getX() >= getPosition().getX() + getMargin().getLeft() && point.getX() + size.getWidth() < getPosition().getX() + getMargin().getLeft() + getSize().getWidth()
+                && point.getY() >= getPosition().getY() + getMargin().getTop() && point.getY() + size.getHeight() < getPosition().getY() + getMargin().getTop()  + getSize().getHeight();
     }
 
     @Override
