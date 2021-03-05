@@ -1,76 +1,66 @@
 package com.ddoerr.clientgui.widgets.functional;
 
-import com.ddoerr.clientgui.attachments.ContainerAttachment;
-import com.ddoerr.clientgui.attachments.CursorAttachment;
-import com.ddoerr.clientgui.attachments.SelectionAttachment;
-import com.ddoerr.clientgui.attachments.ShortcutAttachment;
+import com.ddoerr.clientgui.ClientGuiMod;
+import com.ddoerr.clientgui.ClientGuiRegistries;
+import com.ddoerr.clientgui.attachments.*;
 import com.ddoerr.clientgui.bindings.BindingUtil;
-import com.ddoerr.clientgui.events.FocusEvent;
 import com.ddoerr.clientgui.events.KeyboardEvent;
 import com.ddoerr.clientgui.events.MouseEvent;
 import com.ddoerr.clientgui.models.Color;
 import com.ddoerr.clientgui.models.Insets;
 import com.ddoerr.clientgui.models.Point;
 import com.ddoerr.clientgui.models.Rectangle;
-import com.ddoerr.clientgui.templates.ColorPalette;
 import com.ddoerr.clientgui.util.CursorManager;
 import com.ddoerr.clientgui.util.Renderer;
-import com.ddoerr.clientgui.util.ShortcutBuilder;
+import com.ddoerr.clientgui.models.ShortcutBuilder;
 import com.ddoerr.clientgui.widgets.Widget;
 import com.ddoerr.clientgui.widgets.layout.AnchorWidget;
 import com.ddoerr.clientgui.widgets.visual.BorderWidget;
 import com.ddoerr.clientgui.widgets.visual.LabelWidget;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 
 public class TextFieldWidget extends Widget<TextFieldWidget> {
+    public static final Identifier IDENTIFIER = new Identifier(ClientGuiMod.CLIENT_GUI_NAMESPACE, "text_field_widget");
+
     protected final CursorAttachment cursorAttachment = new CursorAttachment(this, CursorManager.Cursor.IBEAM);
     protected final ContainerAttachment containerAttachment = new ContainerAttachment(focusListeners.fire());
     protected final ShortcutAttachment shortcutAttachment = new ShortcutAttachment();
     protected final SelectionAttachment selectionAttachment = new SelectionAttachment();
-
-    protected final ObjectProperty<ColorPalette> backgroundPalette = new SimpleObjectProperty<>(this, "backgroundPalette",
-            new ColorPalette(Color.BLACK.addAlpha(0.4))
-                    .disabled(Color.GREY.addAlpha(0.4)));
-
-    protected final ObjectProperty<ColorPalette> borderPalette = new SimpleObjectProperty<>(this, "borderPalette",
-            new ColorPalette(Color.BLACK.addAlpha(0.7))
-                    .focused(Color.BLUE.addAlpha(0.7))
-                    .disabled(Color.GREY.addAlpha(0.7)));
+    protected final InteractiveAttachment interactiveAttachment = new InteractiveAttachment(focusListeners.fire());
 
     public TextFieldWidget() {
         attach(cursorAttachment);
         attach(containerAttachment);
         attach(shortcutAttachment);
         attach(selectionAttachment);
+        attach(interactiveAttachment);
 
         containerAttachment.addChild(build());
 
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.backspace"), e -> removeLeft());
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.delete"), e -> removeRight());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.backspace").whenFocused().build(), e -> removeLeft());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.delete").whenFocused().build(), e -> removeRight());
 
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.left"), e -> moveCursorLeft());
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.left").andShift(), e -> moveSelectionLeft());
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.right"), e -> moveCursorRight());
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.right").andShift(), e -> moveSelectionRight());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.left").whenFocused().build(), e -> moveCursorLeft());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.left").whenFocused().andShift().build(), e -> moveSelectionLeft());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.right").whenFocused().build(), e -> moveCursorRight());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.right").whenFocused().andShift().build(), e -> moveSelectionRight());
 
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.v").andControl(), e -> paste());
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.c").andControl(), e -> copy());
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.x").andControl(), e -> cut());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.v").whenFocused().andControl().build(), e -> paste());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.c").whenFocused().andControl().build(), e -> copy());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.x").whenFocused().andControl().build(), e -> cut());
 
-        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.a").andControl(), e -> selectAll());
+        shortcutAttachment.addShortcut(ShortcutBuilder.of("key.keyboard.a").whenFocused().andControl().build(), e -> selectAll());
 
         MinecraftClient.getInstance().keyboard.setRepeatEvents(true);
     }
 
     protected Widget<?> build() {
         return new BorderWidget()
-                .Do(w -> w.borderColorProperty().bind(Bindings.createObjectBinding(() -> borderPalette.get().getColor(this), focusedProperty(), activeProperty(), highlightedProperty(), enabledProperty())))
-                .Do(w -> w.backgroundColorProperty().bind(Bindings.createObjectBinding(() -> backgroundPalette.get().getColor(this), focusedProperty(), activeProperty(), highlightedProperty(), enabledProperty())))
+                .Do(w -> w.borderColorProperty().bind(ClientGuiRegistries.BORDER_COLOR.get(IDENTIFIER).createBinding(this)))
+                .Do(w -> w.backgroundColorProperty().bind(ClientGuiRegistries.BACKGROUND_COLOR.get(IDENTIFIER).createBinding(this)))
                 .setBorderThickness(Insets.of(0, 0, 1, 0))
                 .setPadding(Insets.of(2))
                 .setChild(
@@ -134,20 +124,14 @@ public class TextFieldWidget extends Widget<TextFieldWidget> {
 
     @Override
     public ActionResult mouseDown(MouseEvent mouseEvent) {
-        if (!isWithinWidget(mouseEvent.getPosition())) {
-            return super.mouseUp(mouseEvent);
+        if (isWithinWidget(mouseEvent.getPosition())) {
+            double width = mouseEvent.getPosition().getX() - position.get().getX() + 2;
+            int index = MinecraftClient.getInstance().textRenderer.trimToWidth(selectionAttachment.contentProperty().get(), (int) width).length();
+            selectionAttachment.setCursorIndex(index);
+            selectionAttachment.setSelectionIndex(index);
         }
 
-        if (!isFocused()) {
-            focusListeners.fire().focusChanged(new FocusEvent(this));
-        }
-
-        int width = mouseEvent.getPosition().getX() - position.get().getX() + 2;
-        int index = MinecraftClient.getInstance().textRenderer.trimToWidth(selectionAttachment.contentProperty().get(), width).length();
-        selectionAttachment.setCursorIndex(index);
-        selectionAttachment.setSelectionIndex(index);
-
-        return ActionResult.SUCCESS;
+        return super.mouseDown(mouseEvent);
     }
 
     @Override
@@ -156,8 +140,8 @@ public class TextFieldWidget extends Widget<TextFieldWidget> {
             return super.mouseDragged(mouseEvent);
         }
 
-        int width = mouseEvent.getPosition().getX() - position.get().getX() + 2;
-        int index = MinecraftClient.getInstance().textRenderer.trimToWidth(selectionAttachment.contentProperty().get(), width).length();
+        double width = mouseEvent.getPosition().getX() - position.get().getX() + 2;
+        int index = MinecraftClient.getInstance().textRenderer.trimToWidth(selectionAttachment.contentProperty().get(), (int) width).length();
         selectionAttachment.setCursorIndex(index);
         selectionAttachment.setSelectionIndex(index);
 
@@ -176,8 +160,8 @@ public class TextFieldWidget extends Widget<TextFieldWidget> {
         Rectangle cursor = selectionAttachment.cursorProperty().get();
         Rectangle selection = selectionAttachment.selectionProperty().get();
 
-        int x = getPosition().getX() + 2;
-        int y = getPosition().getY() + (getSize().getHeight() - cursor.getSize().getHeight()) / 2;
+        double x = getPosition().getX() + 2;
+        double y = getPosition().getY() + (getSize().getHeight() - cursor.getSize().getHeight()) / 2;
 
         if (isFocused()) {
             Renderer.renderRectangle(matrixStack, Rectangle.of(cursor.getTopLeftPoint().add(x, y), cursor.getSize()), Color.GREY);

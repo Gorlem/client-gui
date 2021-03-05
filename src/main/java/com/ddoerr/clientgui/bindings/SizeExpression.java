@@ -4,7 +4,9 @@ import com.ddoerr.clientgui.models.Insets;
 import com.ddoerr.clientgui.models.Size;
 import com.sun.javafx.binding.IntegerConstant;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ObservableFloatValue;
 import javafx.beans.value.ObservableIntegerValue;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.beans.value.ObservableObjectValue;
 
 import java.util.function.Function;
@@ -20,6 +22,19 @@ public interface SizeExpression extends ObservableObjectValue<Size> {
 
     default SizeBinding addHeight(int height) {
         return add(0, height);
+    }
+
+    default SizeBinding subtract(SizeExpression sizeBinding) {
+        return SizeBinding.createSizeBinding(() -> Size.of(get().getWidth() - sizeBinding.get().getWidth(), get().getHeight() - sizeBinding.get().getHeight()),
+                this, sizeBinding);
+    }
+
+    default SizeBinding subtractWidth(ObservableIntegerValue width) {
+        return SizeBinding.createSizeBinding(() -> Size.of(get().getWidth() - width.get(), get().getHeight()), this, width);
+    }
+
+    default SizeBinding subtractHeight(ObservableIntegerValue height) {
+        return SizeBinding.createSizeBinding(() -> Size.of(get().getWidth(), get().getHeight() - height.get()), this, height);
     }
 
     default SizeBinding divide(ObservableIntegerValue width, ObservableIntegerValue height) {
@@ -58,8 +73,16 @@ public interface SizeExpression extends ObservableObjectValue<Size> {
         return divide(1, height);
     }
 
+    default SizeBinding setWidth(ObservableNumberValue width) {
+        return SizeBinding.createSizeBinding(() -> Size.of(width.getValue().intValue(), get().getHeight()), this, width);
+    }
+
     default SizeBinding setWidth(int width) {
         return SizeBinding.createSizeBinding(() -> Size.of(width, get().getHeight()), this);
+    }
+
+    default SizeBinding setHeight(ObservableNumberValue height) {
+        return SizeBinding.createSizeBinding(() -> Size.of(get().getWidth(), height.getValue().intValue()), this, height);
     }
 
     default SizeBinding setHeight(int height) {

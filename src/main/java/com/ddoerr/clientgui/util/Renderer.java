@@ -9,20 +9,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.OrderedText;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
+
 public class Renderer {
     private static final MinecraftClient minecraft = MinecraftClient.getInstance();
 
     public static void renderRectangle(MatrixStack matrices, Rectangle rectangle, Color color) {
         DrawableHelper.fill(matrices,
-                rectangle.getTopLeftPoint().getX(),
-                rectangle.getTopLeftPoint().getY(),
-                rectangle.getBottomRightPoint().getX(),
-                rectangle.getBottomRightPoint().getY(),
+                (int) rectangle.getTopLeftPoint().getX(),
+                (int) rectangle.getTopLeftPoint().getY(),
+                (int) rectangle.getBottomRightPoint().getX(),
+                (int) rectangle.getBottomRightPoint().getY(),
                 color.toMinecraftColor());
     }
 
     public static void renderText(MatrixStack matrices, OrderedText text, Point position, Color color) {
-        minecraft.textRenderer.drawWithShadow(matrices, text, position.getX(), position.getY(), color.toMinecraftColor());
+        minecraft.textRenderer.drawWithShadow(matrices, text, (int) position.getX(), (int) position.getY(), color.toMinecraftColor());
     }
 
     public static void renderCenteredText(MatrixStack matrices, OrderedText text, Rectangle rectangle, Color color) {
@@ -63,7 +65,7 @@ public class Renderer {
     }
 
     public static void renderItem(MatrixStack matrices, Point position, Item item) {
-        minecraft.getItemRenderer().renderInGui(new ItemStack(item), position.getX(), position.getY());
+        minecraft.getItemRenderer().renderInGui(new ItemStack(item), (int) position.getX(), (int) position.getY());
     }
 
     public static int textWidth(String text) {
@@ -72,6 +74,11 @@ public class Renderer {
 
     public static int textHeight() {
         return minecraft.textRenderer.fontHeight;
+    }
+
+    public static void renderTooltip(MatrixStack matrixStack, Point position, List<OrderedText> textLines) {
+
+        minecraft.currentScreen.renderOrderedTooltip(matrixStack, textLines, (int) position.getX(), (int) position.getY());
     }
 
     public static void enableScissor(Rectangle area) {

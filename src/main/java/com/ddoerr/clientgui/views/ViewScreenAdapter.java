@@ -1,4 +1,4 @@
-package com.ddoerr.clientgui.attacher;
+package com.ddoerr.clientgui.views;
 
 import com.ddoerr.clientgui.events.KeyboardEvent;
 import com.ddoerr.clientgui.events.MouseEvent;
@@ -7,7 +7,6 @@ import com.ddoerr.clientgui.models.Modifier;
 import com.ddoerr.clientgui.models.Point;
 import com.ddoerr.clientgui.models.RenderLayer;
 import com.ddoerr.clientgui.models.Size;
-import com.ddoerr.clientgui.supports.FocusChangeSupport;
 import com.ddoerr.clientgui.views.AbstractView;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,10 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 
-import java.util.BitSet;
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ViewScreenAdapter extends Screen {
     private final AbstractView view;
@@ -49,26 +45,26 @@ public class ViewScreenAdapter extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         InputUtil.Key mouse = InputUtil.Type.MOUSE.createFromCode(button);
-        ActionResult result = view.mouseDown(new MouseEvent(view, Point.of((int) mouseX, (int) mouseY), mouse));
+        ActionResult result = view.mouseDown(new MouseEvent(view, Point.of((float) mouseX, (float) mouseY), mouse));
         return result != ActionResult.PASS || super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         InputUtil.Key mouse = InputUtil.Type.MOUSE.createFromCode(button);
-        ActionResult result = view.mouseUp(new MouseEvent(view, Point.of((int) mouseX, (int) mouseY), mouse));
+        ActionResult result = view.mouseUp(new MouseEvent(view, Point.of((float) mouseX, (float) mouseY), mouse));
         return result != ActionResult.PASS || super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        view.mouseMoved(new MouseEvent(view, Point.of((int)mouseX, (int)mouseY)));
+        view.mouseMoved(new MouseEvent(view, Point.of((float)mouseX, (float)mouseY)));
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         InputUtil.Key mouse = InputUtil.Type.MOUSE.createFromCode(button);
-        ActionResult result = view.mouseDragged(new MouseEvent(view, Point.of((int) mouseX, (int) mouseY), mouse));
+        ActionResult result = view.mouseDragged(new MouseEvent(view, Point.of((float) mouseX, (float) mouseY), mouse, Point.of((float) deltaX, (float) deltaY)));
         return result != ActionResult.PASS || super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 

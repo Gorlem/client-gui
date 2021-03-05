@@ -1,14 +1,17 @@
-package com.ddoerr.clientgui.util;
+package com.ddoerr.clientgui.models;
 
-import com.ddoerr.clientgui.attachments.ShortcutAttachment;
-import com.ddoerr.clientgui.models.Modifier;
+import com.ddoerr.clientgui.widgets.Widget;
 import net.minecraft.client.util.InputUtil;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
-public class ShortcutBuilder implements ShortcutAttachment.Shortcut {
+public class ShortcutBuilder {
     private final InputUtil.Key key;
     private final EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+    private final List<Predicate<Widget<?>>> rules = new ArrayList<>();
 
     public static ShortcutBuilder of(String key) {
         return new ShortcutBuilder(InputUtil.fromTranslationKey(key));
@@ -38,13 +41,12 @@ public class ShortcutBuilder implements ShortcutAttachment.Shortcut {
         return this;
     }
 
-    @Override
-    public InputUtil.Key getKey() {
-        return key;
+    public ShortcutBuilder whenFocused() {
+        rules.add(Widget::isFocused);
+        return this;
     }
 
-    @Override
-    public EnumSet<Modifier> getModifiers() {
-        return modifiers;
+    public Shortcut build() {
+        return new Shortcut(key, modifiers, rules);
     }
 }

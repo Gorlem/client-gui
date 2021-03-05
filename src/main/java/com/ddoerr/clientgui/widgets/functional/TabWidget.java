@@ -2,11 +2,12 @@ package com.ddoerr.clientgui.widgets.functional;
 
 import com.ddoerr.clientgui.attachments.ContainerAttachment;
 import com.ddoerr.clientgui.bindings.BindingUtil;
+import com.ddoerr.clientgui.models.Axis;
 import com.ddoerr.clientgui.models.Insets;
 import com.ddoerr.clientgui.widgets.Widget;
 import com.ddoerr.clientgui.widgets.layout.AnchorWidget;
 import com.ddoerr.clientgui.widgets.layout.CardWidget;
-import com.ddoerr.clientgui.widgets.layout.StackWidget;
+import com.ddoerr.clientgui.widgets.layout.DynamicStackWidget;
 import com.ddoerr.clientgui.widgets.visual.LabelWidget;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -28,11 +29,11 @@ public class TabWidget extends Widget<TabWidget> {
     }
 
     protected Widget<?> build() {
-        return new StackWidget()
-                .setStackDirection(StackWidget.StackDirection.Vertical)
+        return new DynamicStackWidget()
+                .setAxis(Axis.Vertical)
                 .addChild(
-                        new StackWidget()
-                                .setStackDirection(StackWidget.StackDirection.Horizontal)
+                        new DynamicStackWidget()
+                                .setAxis(Axis.Horizontal)
                                 .Do(w -> w.childrenProperty().bindContent(
                                         BindingUtil.map(tabTitles, c ->
                                                 new ButtonWidget().setChild(c)

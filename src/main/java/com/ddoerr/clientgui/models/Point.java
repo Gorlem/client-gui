@@ -4,27 +4,27 @@ public class Point {
     public static final Point ORIGIN = Point.of(0, 0);
     public static final Point OFF_SCREEN = Point.of(-1, -1);
 
-    private final int x;
-    private final int y;
+    private final double x;
+    private final double y;
 
-    private Point(int x, int y) {
+    private Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public static Point of(int x, int y) {
+    public static Point of(double x, double y) {
         return new Point(x, y);
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public Point add(int x, int y) {
+    public Point add(double x, double y) {
         return new Point(this.x + x, this.y + y);
     }
 
@@ -34,6 +34,10 @@ public class Point {
 
     public Point addPoint(Point point) {
         return add(point.getX(), point.getY());
+    }
+
+    public Point subtractPoint(Point point) {
+        return add(-1 * point.getX(), -1 * point.getY());
     }
 
     @Override

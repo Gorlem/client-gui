@@ -2,16 +2,21 @@ package com.ddoerr.clientgui.bindings;
 
 import com.ddoerr.clientgui.models.Size;
 import com.ddoerr.clientgui.widgets.Widget;
+import com.sun.javafx.binding.DoubleConstant;
+import com.sun.javafx.binding.IntegerConstant;
 import javafx.beans.WeakListener;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
+import net.minecraft.util.math.MathHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -58,5 +63,19 @@ public class BindingUtil {
         });
 
         return observableList;
+    }
+
+    public static NumberBinding divide(ObservableNumberValue dividend, ObservableNumberValue divisor) {
+        return Bindings.createDoubleBinding(() -> {
+            if (divisor.doubleValue() == 0) {
+                return 0d;
+            }
+
+            return dividend.doubleValue() / divisor.doubleValue();
+        }, dividend, divisor);
+    }
+
+    public static NumberBinding range(ObservableNumberValue value, double min, double max) {
+        return Bindings.createDoubleBinding(() -> MathHelper.clamp(value.doubleValue(), min, max), value);
     }
 }

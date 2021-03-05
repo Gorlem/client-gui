@@ -60,7 +60,7 @@ public class ContainerAttachment implements MouseListener, RenderListener, Focus
                     }
 
                     widgetRemovedConsumer.accept(oldWidget);
-                    oldWidget.removeFocusListener(focusListener);
+//                    oldWidget.removeFocusListener(focusListener);
                 }
 
                 for (Widget<?> newWidget : changes.getAddedSubList()) {

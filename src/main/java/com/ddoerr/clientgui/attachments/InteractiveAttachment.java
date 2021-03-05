@@ -7,15 +7,19 @@ import net.minecraft.util.ActionResult;
 import org.apache.commons.lang3.event.EventListenerSupport;
 import org.apache.logging.log4j.LogManager;
 
-public class InteractiveAttachment implements MouseListener, KeyboardListener {
+public class InteractiveAttachment implements MouseListener, KeyboardListener, Attachment {
     protected final EventListenerSupport<ActionListener> actionListeners = EventListenerSupport.create(ActionListener.class);
 
-    private final Widget<?> widget;
+    private Widget<?> widget;
     private final FocusListener focusListener;
 
-    public InteractiveAttachment(Widget<?> widget, FocusListener focusListener) {
-        this.widget = widget;
+    public InteractiveAttachment(FocusListener focusListener) {
         this.focusListener = focusListener;
+    }
+
+    @Override
+    public void initialize(Widget<?> widget) {
+        this.widget = widget;
     }
 
     public void addActionListener(ActionListener actionListener) {
@@ -23,7 +27,7 @@ public class InteractiveAttachment implements MouseListener, KeyboardListener {
     }
 
     @Override
-    public ActionResult mouseUp(MouseEvent mouseEvent) {
+    public ActionResult mouseDown(MouseEvent mouseEvent) {
         if (widget.isEnabled() && widget.isWithinWidget(mouseEvent.getPosition())) {
             actionListeners.fire().doAction(new ActionEvent(widget));
             focusListener.focusChanged(new FocusEvent(widget));
@@ -34,7 +38,7 @@ public class InteractiveAttachment implements MouseListener, KeyboardListener {
     }
 
     @Override
-    public ActionResult keyUp(KeyboardEvent keyboardEvent) {
+    public ActionResult keyDown(KeyboardEvent keyboardEvent) {
         if (widget.isEnabled() && widget.isFocused() && keyboardEvent.getKey() == InputUtil.fromTranslationKey("key.keyboard.space")) {
             actionListeners.fire().doAction(new ActionEvent(widget));
             return ActionResult.SUCCESS;

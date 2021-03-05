@@ -1,7 +1,6 @@
 package com.ddoerr.clientgui.widgets.layout;
 
 import com.ddoerr.clientgui.attachments.ContainerAttachment;
-import com.ddoerr.clientgui.models.Point;
 import com.ddoerr.clientgui.models.Size;
 import com.ddoerr.clientgui.widgets.Widget;
 import javafx.beans.binding.Bindings;

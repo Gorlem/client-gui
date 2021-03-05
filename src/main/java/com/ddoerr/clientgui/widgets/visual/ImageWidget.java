@@ -25,7 +25,7 @@ public class ImageWidget extends Widget<ImageWidget> {
     @Override
     public void render(MatrixStack matrixStack, Point mouse) {
         MinecraftClient.getInstance().getTextureManager().bindTexture(texture.get());
-        DrawableHelper.drawTexture(matrixStack, position.get().getX(), position.get().getY(), size.get().getWidth(), size.get().getHeight(),
+        DrawableHelper.drawTexture(matrixStack, (int) position.get().getX(), (int) position.get().getY(), size.get().getWidth(), size.get().getHeight(),
                 0, 0, size.get().getWidth(), size.get().getHeight(), size.get().getWidth(), size.get().getHeight());
     }
 }

@@ -1,6 +1,7 @@
 package com.ddoerr.clientgui.widgets;
 
 import com.ddoerr.clientgui.attachments.Attachment;
+import com.ddoerr.clientgui.attachments.InteractiveAttachment;
 import com.ddoerr.clientgui.bindings.SizeProperty;
 import com.ddoerr.clientgui.events.*;
 import com.ddoerr.clientgui.models.Insets;
@@ -116,7 +117,9 @@ public abstract class Widget<W extends Widget<W>> implements MouseListener, Focu
         return highlighted.get();
     }
 
-    public boolean isFocusable() { return false; }
+    public boolean isFocusable() {
+        return findFirstAttachment(InteractiveAttachment.class).isPresent();
+    }
 
     public W attach(Object attachment) {
         attachments.add(attachment);

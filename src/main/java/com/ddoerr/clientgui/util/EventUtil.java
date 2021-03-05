@@ -28,6 +28,9 @@ public class EventUtil {
 
     public static <T> void call(List<T> listeners, Consumer<T> proxy) {
         for (T listener : listeners) {
+            if (proxy == null) {
+                continue;
+            }
             proxy.accept(listener);
         }
     }

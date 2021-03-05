@@ -43,8 +43,9 @@ public class LabelWidget extends Widget<LabelWidget> {
     public Color getForegroundColor() {
         return foregroundColor.get();
     }
-    public void setForegroundColor(Color foregroundColor) {
+    public LabelWidget setForegroundColor(Color foregroundColor) {
         this.foregroundColor.set(foregroundColor);
+        return this;
     }
 
     public ObjectProperty<Color> backgroundColorProperty() {
@@ -53,8 +54,9 @@ public class LabelWidget extends Widget<LabelWidget> {
     public Color getBackgroundColor() {
         return backgroundColor.get();
     }
-    public void setBackgroundColor(Color backgroundColor) {
+    public LabelWidget setBackgroundColor(Color backgroundColor) {
         this.backgroundColor.set(backgroundColor);
+        return this;
     }
 
     public LabelWidget() {

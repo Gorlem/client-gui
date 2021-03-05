@@ -3,6 +3,7 @@ package com.ddoerr.clientgui.attachments;
 import com.ddoerr.clientgui.events.RenderEvent;
 import com.ddoerr.clientgui.events.RenderListener;
 import com.ddoerr.clientgui.models.RenderLayer;
+import com.ddoerr.clientgui.util.Renderer;
 import com.ddoerr.clientgui.widgets.Widget;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -43,6 +44,6 @@ public class TooltipAttachment implements RenderListener {
             return;
         }
 
-        minecraft.currentScreen.renderOrderedTooltip(renderEvent.getMatrixStack(), textLines, renderEvent.getMouse().getX(), renderEvent.getMouse().getY());
+        Renderer.renderTooltip(renderEvent.getMatrixStack(), renderEvent.getMouse(), textLinesProperty().get());
     }
 }
